@@ -1,0 +1,15 @@
+{
+  "main": "src/server.js",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "init": "^0.1.2",
+    "mongoose": "^9.7.3",
+    "nodemon": "^3.1.14"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "type":"module"
+}
