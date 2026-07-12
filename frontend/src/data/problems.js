@@ -2,7 +2,7 @@ const PROBLEMS = {
   "two-sum": {
     id: "two-sum",
     title: "Two Sum",
-    difficulty: "Easy",
+    difficulty: "easy",
     category: "Array • Hash Table",
     description: {
       text: "Given an array of integers nums and an integer target, return indices of the two numbers in the array such that they add up to target.",
@@ -76,7 +76,7 @@ class Solution {
   "reverse-string": {
     id: "reverse-string",
     title: "Reverse String",
-    difficulty: "Easy",
+    difficulty: "easy",
     category: "String • Two Pointers",
     description: {
       text: "Write a function that reverses a string. The input string is given as an array of characters s.",
@@ -148,7 +148,7 @@ class Solution {
   "valid-palindrome": {
     id: "valid-palindrome",
     title: "Valid Palindrome",
-    difficulty: "Easy",
+    difficulty: "easy",
     category: "String • Two Pointers",
     description: {
       text: "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.",
@@ -215,7 +215,7 @@ print(isPalindrome(" "))  # Expected: True`,
   "maximum-subarray": {
     id: "maximum-subarray",
     title: "Maximum Subarray",
-    difficulty: "Medium",
+    difficulty: "medium",
     category: "Array • Dynamic Programming",
     description: {
       text: "Given an integer array nums, find the subarray with the largest sum, and return its sum.",
@@ -281,7 +281,7 @@ print(maxSubArray([5,4,-1,7,8]))  # Expected: 23`,
   "container-with-most-water": {
     id: "container-with-most-water",
     title: "Container With Most Water",
-    difficulty: "Medium",
+    difficulty: "medium",
     category: "Array • Two Pointers",
     description: {
       text: "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).",
