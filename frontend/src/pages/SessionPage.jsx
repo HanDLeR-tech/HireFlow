@@ -29,7 +29,7 @@ function SessionPage() {
 
   const session = sessionData?.session;
   const isHost = session?.host?.clerkId === user?.id;
-  const isParticipant = session?.participant?.clerkId === user?.id;
+  const isParticipant = session?.participants?.clerkId === user?.id;
 
   const { call, channel, chatClient, isInitializingCall, streamClient } = useStreamClient(
     session,
@@ -119,7 +119,7 @@ function SessionPage() {
                         )}
                         <p className="text-base-content/60 mt-2">
                           Host: {session?.host?.name || "Loading..."} •{" "}
-                          {session?.participant ? 2 : 1}/2 participants
+                          {session?.participants ? 2 : 1}/2 participants
                         </p>
                       </div>
 
