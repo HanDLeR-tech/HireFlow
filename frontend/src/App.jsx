@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage.jsx";
 import ProblemsPage from "./pages/ProblemsPage.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import SessionPage from "./pages/SessionPage.jsx";
+import ProblemPage from "./pages/ProblemPage.jsx";
 
 function App() {
   const { isSignedIn, isLoaded } = useUser();

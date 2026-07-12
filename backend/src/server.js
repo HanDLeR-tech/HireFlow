@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(clerkMiddleware()); //this adds auth field to request object: req.auth()
 
-app.use("/api/inngest", serve({ client: inngest, functions }));
+// app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/chat",chatRoutes)
 app.use("/api/sessions",sessionRoute)
 
@@ -31,6 +31,15 @@ app.get("/video-calls", protectRoute, (req, res) => {
   res.status(200).json({message:"AUTHENTICATED USER ACCESS GRANTED on protected route"})
 })
 
+app.use(
+  "/api/inngest",
+  (req, res, next) => {
+    console.log("🔥 HIT INNGEST ROUTE");
+    console.log(req.method);
+    next();
+  },
+  serve({ client: inngest, functions })
+);
 app.listen(ENV.PORT, () => {
   console.log(`Server is running on port ${ENV.PORT}`);
   connectDB();

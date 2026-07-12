@@ -2,18 +2,18 @@ import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useEndSession, useJoinSession, useSessionById } from "../hooks/useSessions";
-import { PROBLEMS } from "../data/problems";
-import { executeCode } from "../lib/piston";
-import Navbar from "../components/Navbar";
+import  PROBLEMS  from "../data/problems.js";
+import { executeCode } from "../lib/piston.js";
+import Navbar from "../components/Navbar.jsx";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { getDifficultyBadgeClass } from "../lib/utils";
+import { getDifficultyBadgeClass } from "../lib/utils.js";
 import { Loader2Icon, LogOutIcon, PhoneOffIcon } from "lucide-react";
-import CodeEditorPanel from "../components/CodeEditorPanel";
-import OutputPanel from "../components/OutputPanel";
+import CodeEditorPanel from "../components/CodeEditorPanel.jsx";
+import OutputPanel from "../components/OutputPanel.jsx";
 
-import useStreamClient from "../hooks/useStreamClient";
+import useStreamClient from "../hooks/useStreamClient.js";
 import { StreamCall, StreamVideo } from "@stream-io/video-react-sdk";
-import VideoCallUI from "../components/VideoCallUI";
+import VideoCallUI from "../components/VideoCallUI.jsx";
 
 function SessionPage() {
   const navigate = useNavigate();
