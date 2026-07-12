@@ -1,15 +1,20 @@
 {
   "main": "src/server.js",
   "dependencies": {
+    "@clerk/express": "^2.1.35",
+    "@stream-io/node-sdk": "^0.7.61",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "init": "^0.1.2",
+    "inngest": "^4.11.0",
     "mongoose": "^9.7.3",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "stream-chat": "^9.50.0"
   },
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js"
   },
-  "type":"module"
+  "type": "module"
 }
