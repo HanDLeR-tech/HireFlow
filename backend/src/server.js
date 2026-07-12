@@ -22,7 +22,6 @@ app.use("/api/chat",chatRoutes)
 app.use("/api/sessions",sessionRoute)
 
 app.get("/", (req, res) => {
-  req.auth()
   res.send("Hello from Talent IQ backend!");
 });
 

@@ -1,8 +1,11 @@
 import { Routes, Route, Navigate } from "react-router";
 import "./App.css";
 import { SignInButton, SignOutButton, SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
+import { useEffect } from "react";
 
 import { Toaster } from "react-hot-toast";
+import { setAxiosAuthTokenGetter } from "./lib/axios";
 
 import HomePage from "./pages/HomePage.jsx";
 import ProblemsPage from "./pages/ProblemsPage.jsx";
@@ -12,6 +15,15 @@ import ProblemPage from "./pages/ProblemPage.jsx";
 
 function App() {
   const { isSignedIn, isLoaded } = useUser();
+  const { getToken } = useAuth();
+
+  useEffect(() => {
+    setAxiosAuthTokenGetter(getToken);
+
+    return () => {
+      setAxiosAuthTokenGetter(null);
+    };
+  }, [getToken]);
 
   if (!isLoaded) {
     return null; // or a loading spinner, etc.
