@@ -1,17 +1,22 @@
 import { chatClient } from "../lib/stream.js";
 
-export async function getStreamToken(req, resp) {
+export async function getStreamToken(req, res) {
   try {
-      const token = chatClient.createToken(req.user.clerkId);
-      resp.status(200).json({
-          token,
-          userId: req.user.clerkId,
-          userName: req.user.name,
-          userImage: req.user.profileImage
-      })
-      
+    const streamUserId = req.user._id.toString();
+
+    const token = chatClient.createToken(streamUserId);
+
+    return res.status(200).json({
+      token,
+      userId: streamUserId,
+      userName: req.user.name,
+      userImage: req.user.profileImage,
+    });
   } catch (error) {
-      console.log("Error in getStreamToken controller", error.message);
-      resp.status(500).json({message:"Internal server Error"})
+    console.error("Error in getStreamToken controller:", error);
+
+    return res.status(500).json({
+      message: "Internal Server Error",
+    });
   }
 }

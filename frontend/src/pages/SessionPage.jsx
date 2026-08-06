@@ -1,8 +1,8 @@
-import { useUser } from "@clerk/clerk-react";
+import useAuth from "../hooks/useAuth.js";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useEndSession, useJoinSession, useSessionById } from "../hooks/useSessions";
-import  PROBLEMS  from "../data/problems.js";
+import PROBLEMS from "../data/problems.js";
 import { executeCode } from "../lib/piston.js";
 import Navbar from "../components/Navbar.jsx";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
@@ -18,7 +18,7 @@ import VideoCallUI from "../components/VideoCallUI.jsx";
 function SessionPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { user } = useUser();
+  const { user } = useAuth();
   const [output, setOutput] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
 
@@ -28,20 +28,17 @@ function SessionPage() {
   const endSessionMutation = useEndSession();
 
   const session = sessionData?.session;
-  const isHost = session?.host?.clerkId === user?.id;
-  const isParticipant = session?.participants?.clerkId === user?.id;
-
+  const isHost = session?.host?._id === user?._id;
+  const isParticipant = session?.participants?._id === user?._id;
   const { call, channel, chatClient, isInitializingCall, streamClient } = useStreamClient(
     session,
     loadingSession,
     isHost,
-    isParticipant
+    isParticipant,
   );
 
   // find the problem data based on session problem title
-  const problemData = session?.problem
-    ? Object.values(PROBLEMS).find((p) => p.title === session.problem)
-    : null;
+  const problemData = session?.problem ? Object.values(PROBLEMS).find((p) => p.title === session.problem) : null;
 
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const [code, setCode] = useState(problemData?.starterCode?.[selectedLanguage] || "");
@@ -111,26 +108,16 @@ function SessionPage() {
                   <div className="p-6 bg-base-100 border-b border-base-300">
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h1 className="text-3xl font-bold text-base-content">
-                          {session?.problem || "Loading..."}
-                        </h1>
-                        {problemData?.category && (
-                          <p className="text-base-content/60 mt-1">{problemData.category}</p>
-                        )}
+                        <h1 className="text-3xl font-bold text-base-content">{session?.problem || "Loading..."}</h1>
+                        {problemData?.category && <p className="text-base-content/60 mt-1">{problemData.category}</p>}
                         <p className="text-base-content/60 mt-2">
-                          Host: {session?.host?.name || "Loading..."} •{" "}
-                          {session?.participants ? 2 : 1}/2 participants
+                          Host: {session?.host?.name || "Loading..."} • {session?.participants ? 2 : 1}/2 participants
                         </p>
                       </div>
 
                       <div className="flex items-center gap-3">
-                        <span
-                          className={`badge badge-lg ${getDifficultyBadgeClass(
-                            session?.difficulty
-                          )}`}
-                        >
-                          {session?.difficulty.slice(0, 1).toUpperCase() +
-                            session?.difficulty.slice(1) || "Easy"}
+                        <span className={`badge badge-lg ${getDifficultyBadgeClass(session?.difficulty)}`}>
+                          {session?.difficulty.slice(0, 1).toUpperCase() + session?.difficulty.slice(1) || "Easy"}
                         </span>
                         {isHost && session?.status === "active" && (
                           <button
@@ -183,22 +170,17 @@ function SessionPage() {
                               </div>
                               <div className="bg-base-200 rounded-lg p-4 font-mono text-sm space-y-1.5">
                                 <div className="flex gap-2">
-                                  <span className="text-primary font-bold min-w-[70px]">
-                                    Input:
-                                  </span>
+                                  <span className="text-primary font-bold min-w-[70px]">Input:</span>
                                   <span>{example.input}</span>
                                 </div>
                                 <div className="flex gap-2">
-                                  <span className="text-secondary font-bold min-w-[70px]">
-                                    Output:
-                                  </span>
+                                  <span className="text-secondary font-bold min-w-[70px]">Output:</span>
                                   <span>{example.output}</span>
                                 </div>
                                 {example.explanation && (
                                   <div className="pt-2 border-t border-base-300 mt-2">
                                     <span className="text-base-content/60 font-sans text-xs">
-                                      <span className="font-semibold">Explanation:</span>{" "}
-                                      {example.explanation}
+                                      <span className="font-semibold">Explanation:</span> {example.explanation}
                                     </span>
                                   </div>
                                 )}

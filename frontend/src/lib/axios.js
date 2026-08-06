@@ -3,25 +3,24 @@ import axios from "axios";
 let getAuthToken = null;
 
 export const setAxiosAuthTokenGetter = (tokenGetter) => {
-    getAuthToken = tokenGetter;
+  getAuthToken = tokenGetter;
 };
 
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_URL, // Set the base URL for your API
-    withCredentials: true, //browser will send cookies with every request automatically
-})
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
+});
 
-axiosInstance.interceptors.request.use(async (config) => {
-    if (getAuthToken) {
-        const token = await getAuthToken();
+axiosInstance.interceptors.request.use((config) => {
+  if (getAuthToken) {
+    const token = getAuthToken();
 
-        if (token) {
-            config.headers = config.headers || {};
-            config.headers.Authorization = `Bearer ${token}`;
-        }
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+  }
 
-    return config;
+  return config;
 });
 
 export default axiosInstance;

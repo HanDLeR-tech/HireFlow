@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { useUser } from "@clerk/clerk-react";
+import useAuth from "../hooks/useAuth.js";
 import { useState } from "react";
 import { useActiveSessions, useCreateSession, useMyRecentSessions } from "../hooks/useSessions";
 
@@ -12,7 +12,7 @@ import CreateSessionModal from "../components/CreateSessionModal";
 
 function DashboardPage() {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [roomConfig, setRoomConfig] = useState({ problem: "", difficulty: "" });
 
@@ -34,7 +34,7 @@ function DashboardPage() {
           setShowCreateModal(false);
           navigate(`/session/${data.session._id}`);
         },
-      }
+      },
     );
   };
 
@@ -42,9 +42,9 @@ function DashboardPage() {
   const recentSessions = recentSessionsData?.sessions || [];
 
   const isUserInSession = (session) => {
-    if (!user.id) return false;
+    if (!user?._id) return false;
 
-    return session.host?.clerkId === user.id || session.participants?.clerkId === user.id;
+    return session.host?._id === user._id || session.participants?._id === user._id;
   };
 
   return (
@@ -56,10 +56,7 @@ function DashboardPage() {
         {/* Grid layout */}
         <div className="container mx-auto px-6 pb-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <StatsCards
-              activeSessionsCount={activeSessions.length}
-              recentSessionsCount={recentSessions.length}
-            />
+            <StatsCards activeSessionsCount={activeSessions.length} recentSessionsCount={recentSessions.length} />
             <ActiveSessions
               sessions={activeSessions}
               isLoading={loadingActiveSessions}

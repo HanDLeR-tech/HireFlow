@@ -1,15 +1,19 @@
 {
   "main": "src/server.js",
   "dependencies": {
-    "@clerk/express": "^2.1.35",
     "@stream-io/node-sdk": "^0.7.61",
+    "bcrypt": "^6.0.0",
+    "bullmq": "^6.0.8",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "init": "^0.1.2",
-    "inngest": "^4.11.0",
+    "ioredis": "^6.0.0",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.3",
     "nodemon": "^3.1.14",
+    "rate-limiter-flexible": "^11.2.0",
     "stream-chat": "^9.50.0"
   },
   "scripts": {

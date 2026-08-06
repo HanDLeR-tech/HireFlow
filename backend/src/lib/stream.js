@@ -32,5 +32,6 @@ export const deleteStreamUser = async (userId) => {
     console.log(`Successfully deleted user with ID: ${userId} from Stream.`);
   } catch (error) {
     console.error("Error deleting user from Stream:", error);
+    throw error;
   }
 };

@@ -4,25 +4,44 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Name is required"],
+      trim: true,
+      minlength: [2, "Name must be at least 2 characters"],
+      maxlength: [50, "Name cannot exceed 50 characters"],
     },
+
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
       unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
     },
+
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+      select: false, // Never returned by default
+    },
+
     profileImage: {
       type: String,
       default: "",
     },
-    clerkId: {
+
+    hashedRefreshToken: {
       type: String,
-      required: true,
-      unique: true,
+      select: false, // Never returned by default
+      default: null,
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+  }
 );
+
+
 
 const User = mongoose.model("User", userSchema);
 

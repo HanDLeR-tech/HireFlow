@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@clerk/clerk-react": "^5.61.8",
     "@monaco-editor/react": "^4.7.0",
     "@stream-io/video-react-sdk": "^1.24.0",
     "@tailwindcss/vite": "^4.3.2",

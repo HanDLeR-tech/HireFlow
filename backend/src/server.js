@@ -1,44 +1,63 @@
 import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import { redisConnection } from "./lib/redis.js";
+import "./workers/user.worker.js";  
+
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
-import  cors  from "cors";
-import { serve } from "inngest/express";
-import { inngest, functions } from "./lib/inngest.js";
-import { clerkMiddleware } from "@clerk/express";
-import { protectRoute } from "./middleware/protectRoute.js";
+
+import authRoutes from "./routes/authRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoute from "./routes/sessionRoute.js";
 
+import { protectRoute } from "./middleware/protectRoute.js";
+
 const app = express();
 
-//middleware
 app.use(express.json());
-//Credentials:true => means that our server allows browser to send cookies to the server. This is required for authentication.
-app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
-app.use(clerkMiddleware()); //this adds auth field to request object: req.auth()
 
-// app.use("/api/inngest", serve({ client: inngest, functions }));
-app.use("/api/chat",chatRoutes)
-app.use("/api/sessions",sessionRoute)
-
-app.get("/", (req, res) => {
-  res.send("Hello from Talent IQ backend!");
-});
-
-//when we pass an array of middleware to express route,it automatically flattens it and executes them in order.
-app.get("/video-calls", protectRoute, (req, res) => {
-  res.status(200).json({message:"AUTHENTICATED USER ACCESS GRANTED on protected route"})
-})
+app.use(cookieParser());
 
 app.use(
-  "/api/inngest",
-  (req, res, next) => {
-    console.log("🔥 HIT INNGEST ROUTE");
-    console.log(req.method);
-    next();
-  },
-  serve({ client: inngest, functions })
+  cors({
+    origin: ENV.CLIENT_URL,
+    credentials: true,
+  }),
 );
+
+app.use("/api/auth", authRoutes);
+
+app.use("/api/chat", chatRoutes);
+
+app.use("/api/sessions", sessionRoute);
+
+app.get("/", (req, res) => {
+  res.send("Hello from HireFlow backend!");
+});
+
+app.get("/video-calls", protectRoute, (req, res) => {
+  res.status(200).json({
+    message: "AUTHENTICATED USER ACCESS GRANTED",
+  });
+});
+
+redisConnection.on("connect", () => {
+  console.log("✅ Connected to Redis");
+});
+
+redisConnection.on("ready", () => {
+  console.log("🚀 Redis Ready");
+});
+
+redisConnection.on("error", (err) => {
+  console.error("❌ Redis Error:", err);
+});
+
+redisConnection.on("close", () => {
+  console.log("Redis connection closed");
+});
+
 app.listen(ENV.PORT, () => {
   console.log(`Server is running on port ${ENV.PORT}`);
   connectDB();
