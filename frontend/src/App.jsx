@@ -12,6 +12,10 @@ import ProblemPage from "./pages/ProblemPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 
+import socket from "./lib/socket";
+import { useEffect } from "react";
+
+
 function App() {
   const { isAuthenticated, loading } = useAuth();
 
@@ -31,7 +35,7 @@ function App() {
         <Route path="/problem/:id" element={isAuthenticated ? <ProblemPage /> : <Navigate to="/" />} />
 
         <Route path="/session/:id" element={isAuthenticated ? <SessionPage /> : <Navigate to="/" />} />
-        
+
         <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/dashboard" />} />
 
         <Route path="/register" element={!isAuthenticated ? <RegisterPage /> : <Navigate to="/dashboard" />} />

@@ -1,18 +1,14 @@
-import {
-  CallControls,
-  CallingState,
-  SpeakerLayout,
-  useCallStateHooks,
-} from "@stream-io/video-react-sdk";
+import { CallControls, CallingState, SpeakerLayout, useCallStateHooks } from "@stream-io/video-react-sdk";
 import { Loader2Icon, MessageSquareIcon, UsersIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Channel, Chat, MessageInput, MessageList, Thread, Window } from "stream-chat-react";
+import SessionChat from "./SessionChat.jsx";
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import "stream-chat-react/dist/css/v2/index.css";
 
-function VideoCallUI({ chatClient, channel }) {
+function VideoCallUI({ chatClient, channel, sessionId }) {
   const navigate = useNavigate();
   const { useCallCallingState, useParticipantCount } = useCallStateHooks();
   const callingState = useCallCallingState();
@@ -74,6 +70,7 @@ function VideoCallUI({ chatClient, channel }) {
             <>
               <div className="bg-[#1c1e22] p-3 border-b border-[#3a3d44] flex items-center justify-between">
                 <h3 className="font-semibold text-white">Session Chat</h3>
+
                 <button
                   onClick={() => setIsChatOpen(false)}
                   className="text-gray-400 hover:text-white transition-colors"
@@ -82,16 +79,9 @@ function VideoCallUI({ chatClient, channel }) {
                   <XIcon className="size-5" />
                 </button>
               </div>
-              <div className="flex-1 overflow-hidden stream-chat-dark">
-                <Chat client={chatClient} theme="str-chat__theme-dark">
-                  <Channel channel={channel}>
-                    <Window>
-                      <MessageList />
-                      <MessageInput />
-                    </Window>
-                    <Thread />
-                  </Channel>
-                </Chat>
+
+              <div className="flex-1 overflow-hidden">
+                <SessionChat sessionId={sessionId} />
               </div>
             </>
           )}

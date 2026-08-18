@@ -28,8 +28,13 @@ function SessionPage() {
   const endSessionMutation = useEndSession();
 
   const session = sessionData?.session;
-  const isHost = session?.host?._id === user?._id;
-  const isParticipant = session?.participants?._id === user?._id;
+  const sessionParticipantIds = Array.isArray(session?.participants)
+    ? session.participants.map((participant) => participant?._id?.toString() || participant?.toString())
+    : [session?.participants?._id?.toString() || session?.participants?.toString()].filter(Boolean);
+
+  const isHost = session?.host?._id?.toString() === user?._id?.toString();
+  const isParticipant = isHost || sessionParticipantIds.includes(user?._id?.toString());
+
   const { call, channel, chatClient, isInitializingCall, streamClient } = useStreamClient(
     session,
     loadingSession,
@@ -262,7 +267,7 @@ function SessionPage() {
                 <div className="h-full">
                   <StreamVideo client={streamClient}>
                     <StreamCall call={call}>
-                      <VideoCallUI chatClient={chatClient} channel={channel} />
+                      <VideoCallUI chatClient={chatClient} channel={channel} sessionId={id} />{" "}
                     </StreamCall>
                   </StreamVideo>
                 </div>

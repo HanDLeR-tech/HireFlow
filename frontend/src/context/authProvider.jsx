@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import AuthContext from "./authContext.jsx";
 import { setAxiosAuthTokenGetter } from "../lib/axios.js";
 import axiosInstance from "../lib/axios.js";
+import socket from "../lib/socket.js";
 
 export default function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useState(null);
@@ -59,12 +60,28 @@ export default function AuthProvider({ children }) {
 
       logout,
     }),
-    [accessToken, user, loading]
+    [accessToken, user, loading],
   );
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  useEffect(() => {
+    if (!accessToken) {
+      if (socket.connected) {
+        socket.disconnect();
+      }
+
+      return;
+    }
+
+    socket.auth = {
+      token: accessToken,
+    };
+
+    socket.connect();
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [accessToken]);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
